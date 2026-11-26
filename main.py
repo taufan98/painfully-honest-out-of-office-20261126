@@ -18,10 +18,16 @@ def main() -> None:
     assert text.strip(), "entry must not be only whitespace"
     assert "\n" not in text and "\r" not in text, "entry must be a single line"
     assert text == text.strip(), "entry must not start or end with whitespace"
+    # The brief wants one sentence: exactly one sentence-ending full stop,
+    # at the very end (the em dash and comma inside are not sentence breaks).
+    assert text.endswith(".") and text.count(".") == 1, (
+        "entry must be a single sentence"
+    )
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8") as f:
         f.write(text)
+    print(f"wrote {len(text)}-char entry to {os.path.join(out_dir, 'entry.txt')}")
 
 
 if __name__ == "__main__":
